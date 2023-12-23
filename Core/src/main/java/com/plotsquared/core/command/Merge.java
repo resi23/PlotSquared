@@ -150,8 +150,13 @@ public class Merge extends SubCommand {
         }
         final PlotArea plotArea = plot.getArea();
         PlotExpression priceExr = plotArea.getPrices().getOrDefault("merge", null);
-        final double price = priceExr == null ? 0d : priceExr.evaluate(size);
-
+//        final double price = priceExr == null ? 0d : priceExr.evaluate(size);
+        final double price;
+        if(priceExr == null){
+            price = 0d;
+        } else {
+            price = (priceExr.evaluate(size)/100)*(100-player.hasPermissionRange("plots.discount", 40));
+        }
         UUID uuid = player.getUUID();
 
         if (!force && !plot.isOwner(uuid)) {
