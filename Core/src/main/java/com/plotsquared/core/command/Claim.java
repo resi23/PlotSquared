@@ -144,7 +144,7 @@ public class Claim extends SubCommand {
             if (this.econHandler.isEnabled(area) && !force && !player.hasPermission(Permission.PERMISSION_ADMIN_BYPASS_ECON)) {
                 PlotExpression costExr = area.getPrices().get("claim");
                 double cost = costExr.evaluate(currentPlots);
-                cost *= (100 - player.hasPermissionRange("plots.discount", 40)) / 100;
+                cost = (cost/100)*(100-player.hasPermissionRange("plots.discount", 40));
                 if (cost > 0d) {
                     if (!this.econHandler.isSupported()) {
                         player.sendMessage(TranslatableCaption.of("economy.vault_or_consumer_null"));

@@ -303,8 +303,7 @@ public class Auto extends SubCommand {
                     player.getPlotCount() :
                     player.getPlotCount(plotarea.getWorldName()));
             cost = size * cost + mergeCost;
-            cost *= (100 - player.hasPermissionRange("plots.discount", 40)) / 100;
-
+            cost = (cost/100)*(100-player.hasPermissionRange("plots.discount", 40));
             if (cost > 0d) {
                 if (!this.econHandler.isSupported()) {
                     player.sendMessage(TranslatableCaption.of("economy.vault_or_consumer_null"));
