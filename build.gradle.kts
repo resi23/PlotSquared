@@ -22,7 +22,7 @@ plugins {
 }
 
 group = "com.intellectualsites.plotsquared"
-version = "7.3.7-SNAPSHOT"
+version = "7.3.9-SNAPSHOT"
 
 if (!File("$rootDir/.git").exists()) {
     logger.lifecycle("""
@@ -118,7 +118,7 @@ subprojects {
     }
 
     signing {
-        if (!version.toString().endsWith("-SNAPSHOT")) {
+        if (!project.hasProperty("skip.signing") && !version.toString().endsWith("-SNAPSHOT")) {
             val signingKey: String? by project
             val signingPassword: String? by project
             useInMemoryPgpKeys(signingKey, signingPassword)
@@ -209,6 +209,11 @@ subprojects {
         test {
             useJUnitPlatform()
         }
+
+        withType<AbstractArchiveTask>().configureEach {
+            isPreserveFileTimestamps = false
+            isReproducibleFileOrder = true
+        }
     }
 }
 
@@ -225,7 +230,7 @@ tasks.getByName<Jar>("jar") {
     enabled = false
 }
 
-val supportedVersions = listOf("1.16.5", "1.17.1", "1.18.2", "1.19.4", "1.20.1", "1.20.4")
+val supportedVersions = listOf("1.18.2", "1.19.4", "1.20.1", "1.20.4")
 tasks {
     register("cacheLatestFaweArtifact") {
         val lastSuccessfulBuildUrl = uri("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/api/json").toURL()
